@@ -1,0 +1,65 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #fafafa;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  background: #222;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#reader {
+  margin-top: 15px;
+  width: 100%;
+}
+
+#jibu {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+#jibu.imelipwa {
+  background: #1e8e3e;
+}
+
+#jibu.haijalipwa {
+  background: #d93025;
+}
+
+#jibu.haijulikani {
+  background: #666;
+}
+
+#jinaMgeni {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+#hali {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+}
+
+#mwingine {
+  background: #fff;
+  color: #222;
+}

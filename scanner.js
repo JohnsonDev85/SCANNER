@@ -3,16 +3,33 @@ const kisanduku = document.getElementById("jibu");
 const jinaMgeni = document.getElementById("jinaMgeni");
 const hali = document.getElementById("hali");
 
+// Mstari wa aina ya kadi (SINGLE / DOUBLE), unatengenezwa hapa hapa
+const ainaKadi = document.createElement("p");
+ainaKadi.style.cssText = "font-size:34px;font-weight:bold;margin:14px 0;letter-spacing:1px;";
+kisanduku.insertBefore(ainaKadi, document.getElementById("mwingine"));
+
 let anaangalia = false;
 let scanner = null;
 let db = null;
 
-function onyeshaJibu(darasa, jina, maneno) {
+function maandishiAina(aina) {
+  return aina === "double" ? "DOUBLE: WATU 2" : "SINGLE: MTU 1";
+}
+
+function onyeshaJibu(darasa, jina, maneno, aina) {
   kisanduku.style.background = ""; // futa rangi maalum ya mwisho
   kisanduku.className = darasa;
   kisanduku.style.display = "block";
   jinaMgeni.textContent = jina;
   hali.textContent = maneno;
+
+  if (aina) {
+    ainaKadi.textContent = maandishiAina(aina);
+    ainaKadi.style.display = "block";
+  } else {
+    ainaKadi.textContent = "";
+    ainaKadi.style.display = "none";
+  }
 }
 
 window.onerror = function (ujumbe) {
@@ -56,20 +73,21 @@ async function angaliaMgeni(maandishi) {
       }
 
       const mgeni = doc.data();
+      const ainaYaKadi = mgeni.aina === "double" ? "double" : "single";
 
       if (mgeni.paid !== true) {
         return { aina: "haijalipwa", jina: mgeni.name };
       }
 
       if (mgeni.attended === true) {
-        return { aina: "ameshaingia", jina: mgeni.name };
+        return { aina: "ameshaingia", jina: mgeni.name, kadi: ainaYaKadi };
       }
 
       t.update(ref, {
         attended: true,
         attendedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      return { aina: "karibu", jina: mgeni.name };
+      return { aina: "karibu", jina: mgeni.name, kadi: ainaYaKadi };
     });
 
     if (matokeo.aina === "haijulikani") {
@@ -77,10 +95,10 @@ async function angaliaMgeni(maandishi) {
     } else if (matokeo.aina === "haijalipwa") {
       onyeshaJibu("haijalipwa", matokeo.jina, "HAJALIPA ✘");
     } else if (matokeo.aina === "ameshaingia") {
-      onyeshaJibu("haijulikani", matokeo.jina, "ALISHAINGIA TAYARI");
+      onyeshaJibu("haijulikani", matokeo.jina, "ALISHAINGIA TAYARI", matokeo.kadi);
       kisanduku.style.background = "#e8710a"; // machungwa
     } else {
-      onyeshaJibu("imelipwa", matokeo.jina, "AMELIPA ✔ KARIBU");
+      onyeshaJibu("imelipwa", matokeo.jina, "AMELIPA ✔ KARIBU", matokeo.kadi);
     }
   } catch (error) {
     onyeshaJibu("haijulikani", "Kosa", error.message);
